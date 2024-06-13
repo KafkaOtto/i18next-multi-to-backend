@@ -1,17 +1,37 @@
-const resourcesToBackend = (res) => ({
+const multiResourcesBackend = (res, k) => ({
   type: 'backend',
-  init (services, backendOptions, i18nextOptions) { /* use services and options */ },
+  init (services, backendOptions, i18nextOptions) {
+    // Initialization logic (if any)
+  },
   read (language, namespace, callback) {
-    if (typeof res === 'function') { // in case someone wants to customize the loading...
+    if (typeof res === 'function') {
       if (res.length < 3) {
-        // no callback
         try {
           const r = res(language, namespace)
           if (r && typeof r.then === 'function') {
-            // promise
-            r.then((data) => callback(null, (data && data.default) || data)).catch(callback)
+            r.then((module) => {
+              const mainContent = (module && module.default) || module
+              if (typeof mainContent === 'string') {
+                fetch(mainContent)
+                  .then(res => res.text())
+                  .then(res => {
+                    const result = {}
+                    result[k || 'content'] = res
+                    callback(null, result)
+                  })
+              } else {
+                if (k) {
+                  const result = {}
+                  result[k] = mainContent
+                  callback(null, result)
+                } else {
+                  callback(null, mainContent)
+                }
+              }
+            }).catch((err) => {
+              callback(err, false)
+            })
           } else {
-            // sync
             callback(null, r)
           }
         } catch (err) {
@@ -19,7 +39,7 @@ const resourcesToBackend = (res) => ({
         }
         return
       }
-      // normal with callback
+
       res(language, namespace, callback)
       return
     }
@@ -27,4 +47,4 @@ const resourcesToBackend = (res) => ({
   }
 })
 
-export default resourcesToBackend
+export default multiResourcesBackend

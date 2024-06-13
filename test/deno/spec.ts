@@ -1,7 +1,7 @@
 import { assertEquals } from 'https://deno.land/std/testing/asserts.ts'
 import i18next from 'https://deno.land/x/i18next/index.js'
 import ChainedBackend from 'https://deno.land/x/i18next_chained_backend/index.js'
-import resourcesToBackend from '../../index.js'
+import multiResourcesBackend from '../../index.js'
 const { test } = Deno
 
 test('basic chained-backend', async () => {

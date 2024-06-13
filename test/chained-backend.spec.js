@@ -1,6 +1,6 @@
 import i18next from 'i18next'
 import ChainedBackend from 'i18next-chained-backend'
-import resourcesToBackend from '../index.js'
+import multiResourcesBackend from '../index.js'
 import should from 'should'
 
 describe('basic chained-backend', () => {
@@ -64,10 +64,10 @@ describe('basic chained-backend', () => {
       defaultNS: 'translation',
       backend: {
         backends: [
-          resourcesToBackend(resA),
-          resourcesToBackend((lng, ns, clb) => clb(null, resB && resB[lng] && resB[lng][ns])),
-          resourcesToBackend(async (lng, ns) => resC && resC[lng] && resC[lng][ns]),
-          resourcesToBackend(async (...args) => resD && resD[args[0]] && resD[args[0]][args[1]])
+          multiResourcesBackend(resA),
+          multiResourcesBackend((lng, ns, clb) => clb(null, resB && resB[lng] && resB[lng][ns])),
+          multiResourcesBackend(async (lng, ns) => resC && resC[lng] && resC[lng][ns]),
+          multiResourcesBackend(async (...args) => resD && resD[args[0]] && resD[args[0]][args[1]])
         ]
       }
     })

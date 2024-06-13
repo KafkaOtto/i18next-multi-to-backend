@@ -1,9 +1,8 @@
 import i18next from 'i18next'
-import resourcesToBackend from 'i18next-resources-to-backend'
-// import resourcesToBackend from '../../dist/esm/index.js'
+import multiResourcesBackend from "i18next-multi-to-backend";
 
 i18next
-  .use(resourcesToBackend((language, namespace) => import(`./locales/${language}/${namespace}.json`, { assert: { type: 'json' } })))
+  .use(mdToBackend((language, namespace) => import(`./locales/${language}/${namespace}.md`)))
 
 await i18next.init({
   // debug: true,
